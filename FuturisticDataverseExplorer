@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Futuristic Dataverse Explorer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body {
+            background-color: #0a192f;
+            color: #64ffda;
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+        #explorer {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+        .section-label {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #8892b0;
+        }
+        #parents, #current, #children {
+            padding: 20px;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        #parents {
+            background-color: #172a45;
+            flex: 0 0 auto;
+            max-height: 30vh;
+            overflow-y: auto;
+        }
+        #current {
+            background-color: #303C55;
+            text-align: center;
+            font-size: 1.5rem;
+            padding: 30px;
+            flex: 0 0 auto;
+        }
+        #children {
+            background-color: #0b2135;
+            flex: 1 1 auto;
+            overflow-y: auto;
+        }
+        .topic {
+            cursor: pointer;
+            padding: 15px;
+            border-radius: 8px;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+        }
+        .topic:hover {
+            box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+            transform: translateY(-5px);
+        }
+        .parent-topic {
+            background-color: #4a5568;
+            color: #a0aec0;
+            margin: 5px 0;
+        }
+        .parent-topic:hover {
+            background-color: #2d3748;
+        }
+        .child-topic {
+            background-color: #2a4365;
+            margin-bottom: 20px;
+        }
+        .child-topic:hover {
+            background-color: #2c5282;
+        }
+        .grandchild-topic {
+            background-color: #1a365d;
+            margin: 10px 0;
+            font-size: 0.9em;
+        }
+        .grandchild-topic:hover {
+            background-color: #2a4a80;
+        }
+        .header {
+            background-color: #1a202c;
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1 class="flow-text">Expanded Hyper-Futuristic Dataverse Explorer</h1>
+    </div>
+    <div id="explorer">
+        <div id="parents">
+            <div class="section-label">Parent Nodes</div>
+            <div id="parents-content"></div>
+        </div>
+        <div id="current">
+            <div class="section-label">Current Node</div>
+            <div id="current-content"></div>
+        </div>
+        <div id="children">
+            <div class="section-label">Child Nodes</div>
+            <div id="children-content"></div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        const dataverse = {
+            "Dataverse Core": {
+                "Physical Realm": {
+                    "Cosmic Structures": {
+                        "Galactic Formations": {
+                            "Spiral Galaxies": {"Milky Way Analogs": {}, "Andromeda-like Systems": {}},
+                            "Elliptical Galaxies": {"Giant Ellipticals": {}, "Dwarf Ellipticals": {}},
+                            "Irregular Galaxies": {"Magellanic Clouds": {}, "Starburst Galaxies": {}}
+                        },
+                        "Stellar Phenomena": {
+                            "Star Life Cycles": {"Main Sequence Stars": {}, "Red Giants": {}, "White Dwarfs": {}, "Neutron Stars": {}, "Black Holes": {}},
+                            "Stellar Nurseries": {"Molecular Clouds": {}, "Protostellar Disks": {}},
+                            "Supernovae": {"Type Ia": {}, "Type II": {}, "Hypernova": {}}
+                        },
+                        "Cosmic Voids": {"Local Void": {}, "Boötes Void": {}, "Giant Void": {}}
+                    },
+                    "Quantum Realm": {
+                        "Fundamental Particles": {
+                            "Fermions": {"Quarks": {}, "Leptons": {}},
+                            "Bosons": {"Gauge Bosons": {}, "Higgs Boson": {}}
+                        },
+                        "Quantum Effects": {
+                            "Superposition": {"Schrödinger's Cat": {}, "Quantum Entanglement": {}},
+                            "Quantum Tunneling": {"Alpha Decay": {}, "Scanning Tunneling Microscope": {}},
+                            "Wave-Particle Duality": {"Double-Slit Experiment": {}, "Compton Effect": {}}
+                        },
+                        "Quantum Fields": {"Electromagnetic Field": {}, "Higgs Field": {}, "Gravitational Field": {}}
+                    },
+                    "Biospheric Systems": {
+                        "Terrestrial Ecosystems": {
+                            "Forests": {"Tropical Rainforests": {}, "Temperate Deciduous": {}, "Boreal Forests": {}},
+                            "Grasslands": {"Savanna": {}, "Prairies": {}, "Steppes": {}},
+                            "Deserts": {"Hot Deserts": {}, "Cold Deserts": {}, "Coastal Deserts": {}}
+                        },
+                        "Aquatic Ecosystems": {
+                            "Marine": {"Coral Reefs": {}, "Deep Sea": {}, "Coastal Waters": {}},
+                            "Freshwater": {"Lakes": {}, "Rivers": {}, "Wetlands": {}}
+                        },
+                        "Microscopic Biomes": {"Soil Microbiome": {}, "Human Microbiome": {}, "Ocean Microbiome": {}}
+                    }
+                },
+                "Conceptual Domain": {
+                    "Scientific Paradigms": {
+                        "Physical Sciences": {
+                            "Classical Physics": {"Newtonian Mechanics": {}, "Thermodynamics": {}},
+                            "Modern Physics": {"Relativity": {}, "Quantum Mechanics": {}},
+                            "Interdisciplinary Physics": {"Biophysics": {}, "Geophysics": {}, "Astrophysics": {}}
+                        },
+                        "Life Sciences": {
+                            "Molecular Biology": {"Genomics": {}, "Proteomics": {}},
+                            "Evolutionary Biology": {"Natural Selection": {}, "Genetic Drift": {}, "Speciation": {}},
+                            "Neuroscience": {"Cognitive Neuroscience": {}, "Neuroplasticity": {}, "Brain-Computer Interfaces": {}}
+                        },
+                        "Earth and Space Sciences": {
+                            "Geology": {"Plate Tectonics": {}, "Mineralogy": {}, "Volcanology": {}},
+                            "Climatology": {"Atmospheric Science": {}, "Oceanography": {}, "Paleoclimatology": {}},
+                            "Astronomy": {"Planetary Science": {}, "Stellar Astrophysics": {}, "Cosmology": {}}
+                        }
+                    },
+                    "Philosophical Frameworks": {
+                        "Epistemology": {
+                            "Rationalism": {"Cartesian Method": {}, "Kantian Transcendentalism": {}},
+                            "Empiricism": {"Lockean Sensationalism": {}, "Humean Skepticism": {}},
+                            "Constructivism": {"Piagetian Cognitive Development": {}, "Social Constructivism": {}}
+                        },
+                        "Ethics": {
+                            "Deontological Ethics": {"Kantian Ethics": {}, "Divine Command Theory": {}},
+                            "Consequentialism": {"Utilitarianism": {}, "Ethical Egoism": {}},
+                            "Virtue Ethics": {"Aristotelian Virtue Ethics": {}, "Neo-Aristotelian Approaches": {}}
+                        },
+                        "Metaphysics": {
+                            "Ontology": {"Materialism": {}, "Idealism": {}, "Dualism": {}},
+                            "Philosophy of Mind": {"Functionalism": {}, "Eliminative Materialism": {}, "Panpsychism": {}},
+                            "Free Will": {"Compatibilism": {}, "Libertarianism": {}, "Hard Determinism": {}}
+                        }
+                    },
+                    "Artistic Expressions": {
+                        "Visual Arts": {
+                            "Painting": {"Renaissance": {}, "Impressionism": {}, "Abstract Expressionism": {}},
+                            "Sculpture": {"Classical": {}, "Modern": {}, "Installation Art": {}},
+                            "Digital Art": {"3D Modeling": {}, "Generative Art": {}, "Virtual Reality Art": {}}
+                        },
+                        "Performance Arts": {
+                            "Theater": {"Greek Tragedy": {}, "Shakespearean Drama": {}, "Absurdist Theater": {}},
+                            "Dance": {"Ballet": {}, "Modern Dance": {}, "Hip Hop": {}},
+                            "Music": {"Classical": {}, "Jazz": {}, "Electronic": {}}
+                        },
+                        "Literary Arts": {
+                            "Poetry": {"Epic Poetry": {}, "Lyric Poetry": {}, "Experimental Poetry": {}},
+                            "Prose": {"Novels": {}, "Short Stories": {}, "Creative Non-fiction": {}},
+                            "Dramatic Writing": {"Screenplays": {}, "Stage Plays": {}, "Radio Dramas": {}}
+                        }
+                    }
+                },
+                "Temporal Continuum": {
+                    "Past Epochs": {
+                        "Prehistoric Era": {
+                            "Paleolithic": {"Early Stone Age": {}, "Middle Stone Age": {}, "Late Stone Age": {}},
+                            "Mesolithic": {"European Mesolithic": {}, "Near Eastern Epipalaeolithic": {}},
+                            "Neolithic": {"Agricultural Revolution": {}, "Megalithic Cultures": {}}
+                        },
+                        "Ancient Civilizations": {
+                            "Mesopotamia": {"Sumerian City-States": {}, "Babylonian Empire": {}, "Assyrian Empire": {}},
+                            "Ancient Egypt": {"Old Kingdom": {}, "Middle Kingdom": {}, "New Kingdom": {}},
+                            "Classical Antiquity": {"Ancient Greece": {}, "Roman Empire": {}, "Han Dynasty": {}}
+                        },
+                        "Middle Ages": {
+                            "Early Middle Ages": {"Byzantine Empire": {}, "Islamic Golden Age": {}, "Viking Age": {}},
+                            "High Middle Ages": {"Feudalism": {}, "Crusades": {}, "Medieval Universities": {}},
+                            "Late Middle Ages": {"Black Death": {}, "Hundred Years' War": {}, "Renaissance Beginnings": {}}
+                        }
+                    },
+                    "Present Era": {
+                        "Modern Age": {
+                            "Industrial Revolution": {"First Industrial Revolution": {}, "Second Industrial Revolution": {}},
+                            "World Wars": {"World War I": {}, "World War II": {}, "Cold War": {}},
+                            "Information Age": {"Digital Revolution": {}, "Internet Era": {}, "Social Media Age": {}}
+                        },
+                        "Contemporary Issues": {
+                            "Global Challenges": {"Climate Change": {}, "Pandemics": {}, "Economic Inequality": {}},
+                            "Technological Advancements": {"Artificial Intelligence": {}, "Biotechnology": {}, "Quantum Computing": {}},
+                            "Social Movements": {"Civil Rights": {}, "Environmental Activism": {}, "Gender Equality": {}}
+                        },
+                        "Emerging Trends": {
+                            "Future of Work": {"Remote Work": {}, "Gig Economy": {}, "Automation": {}},
+                            "Sustainable Development": {"Renewable Energy": {}, "Circular Economy": {}, "Smart Cities": {}},
+                            "Space Exploration": {"Mars Colonization": {}, "Asteroid Mining": {}, "Interstellar Travel": {}}
+                        }
+                    },
+                    "Future Possibilities": {
+                        "Near Future": {
+                            "Technological Singularity": {"Superintelligence": {}, "Transhumanism": {}, "Mind Uploading": {}},
+                            "Post-Scarcity Economy": {"Universal Basic Income": {}, "Energy Abundance": {}, "Molecular Manufacturing": {}},
+                            "Climate Adaptation": {"Geoengineering": {}, "Vertical Farming": {}, "Synthetic Ecosystems": {}}
+                        },
+                        "Far Future": {
+                            "Space Colonization": {"Dyson Spheres": {}, "Interstellar Empires": {}, "Galactic Federation": {}},
+                            "Post-Human Evolution": {"Genetic Engineering": {}, "Cyborg Integration": {}, "Artificial Life Forms": {}},
+                            "Cosmic Fate": {"Heat Death": {}, "Big Crunch": {}, "Multiverse Theories": {}}
+                        },
+                        "Speculative Futures": {
+                            "Alternative Timelines": {"Parallel Universes": {}, "Temporal Paradoxes": {}, "Alternate Histories": {}},
+                            "Posthuman Scenarios": {"Technological Transcendence": {}, "Collective Consciousness": {}, "Silicon-Based Life": {}},
+                            "Existential Possibilities": {"First Contact": {}, "Simulation Hypothesis": {}, "Omega Point": {}}
+                        }
+                    }
+                },
+                "Emotional Spectrum": {
+                    "Joyful Experiences": {
+                        "Personal Achievements": {"Goal Attainment": {}, "Skill Mastery": {}, "Self-Discovery": {}},
+                        "Interpersonal Connections": {"Deep Friendships": {}, "Romantic Love": {}, "Family Bonds": {}},
+                        "Aesthetic Pleasures": {"Natural Beauty": {}, "Artistic Appreciation": {}, "Sensory Delights": {}}
+                    },
+                    "Curious Explorations": {
+                        "Intellectual Pursuits": {
+                            "Scientific Inquiry": {"Theoretical Breakthroughs": {}, "Empirical Discoveries": {}},
+                            "Philosophical Contemplation": {"Existential Questions": {}, "Ethical Dilemmas": {}},
+                            "Creative Problem-Solving": {"Innovation": {}, "Lateral Thinking": {}}
+                        },
+                        "Novel Experiences": {
+                            "Travel and Adventure": {"Cultural Immersion": {}, "Extreme Sports": {}, "Space Tourism": {}},
+                            "Skill Acquisition": {"Language Learning": {}, "Musical Instruments": {}, "Culinary Arts": {}},
+                            "Technological Frontiers": {"Virtual Reality Worlds": {}, "Brain-Computer Interfaces": {}, "Augmented Cognition": {}}
+                        },
+                        "Mystery and Wonder": {
+                            "Unexplained Phenomena": {"Paranormal Experiences": {}, "Cryptozoology": {}, "UFO Sightings": {}},
+                            "Cosmic Mysteries": {"Dark Matter": {}, "Black Holes": {}, "Extraterrestrial Life": {}},
+                            "Historical Enigmas": {"Lost Civilizations": {}, "Ancient Technologies": {}, "Unsolved Crimes": {}}
+                        }
+                    },
+                    "Challenging Growth": {
+                        "Personal Development": {
+                            "Emotional Intelligence": {"Self-Awareness": {}, "Empathy": {}, "Resilience": {}},
+                            "Cognitive Enhancement": {"Mindfulness Practices": {}, "Memory Techniques": {}, "Critical Thinking": {}},
+                            "Physical Transformation": {"Fitness Milestones": {}, "Dietary Changes": {}, "Biohacking": {}}
+                        },
+                        "Overcoming Adversity": {
+                            "Personal Setbacks": {"Failure Recovery": {}, "Trauma Healing": {}, "Addiction Recovery": {}},
+                            "Societal Challenges": {"Social Justice Activism": {}, "Environmental Conservation": {}, "Poverty Alleviation": {}},
+                            "Global Crises": {"Pandemic Response": {}, "Climate Change Adaptation": {}, "Conflict Resolution": {}}
+                        },
+                        "Transformative Experiences": {
+                            "Spiritual Awakening": {"Meditation Insights": {}, "Near-Death Experiences": {}, "Mystical Encounters": {}},
+                            "Paradigm Shifts": {"Worldview Changes": {}, "Ideological Transformations": {}, "Scientific Revolutions": {}},
+                            "Life Transitions": {"Career Changes": {}, "Relationship Milestones": {}, "Identity Evolutions": {}}
+                        }
+                    },
+                    "Complex Emotional States": {
+                        "Bittersweet Moments": {
+                            "Nostalgia": {"Childhood Memories": {}, "Past Relationships": {}, "Cultural Heritage": {}},
+                            "Poignant Farewells": {"Graduations": {}, "Career Transitions": {}, "Moving Away": {}},
+                            "Melancholic Beauty": {"Autumn Landscapes": {}, "Ruins of Ancient Civilizations": {}, "Fading Sunsets": {}}
+                        },
+                        "Conflicting Emotions": {
+                            "Moral Dilemmas": {"Ethical Trade-offs": {}, "Loyalty Conflicts": {}, "Truth vs. Kindness": {}},
+                            "Ambivalent Relationships": {"Love-Hate Dynamics": {}, "Frenemies": {}, "Family Complexities": {}},
+                            "Mixed Success": {"Pyrrhic Victories": {}, "Bittersweet Achievements": {}, "Unexpected Consequences": {}}
+                        },
+                        "Transcendent States": {
+                            "Flow Experiences": {"Athletic 'Zone'": {}, "Artistic Inspiration": {}, "Deep Work Focus": {}},
+                            "Peak Emotions": {"Ecstatic Joy": {}, "Profound Awe": {}, "Overwhelming Gratitude": {}},
+                            "Unity Consciousness": {"Meditation-Induced Oneness": {}, "Psychedelic Experiences": {}, "Near-Death Insights": {}}
+                        }
+                    }
+                }
+            }
+        };
+        
+
+        const parentsEl = document.getElementById('parents-content');
+        const currentEl = document.getElementById('current-content');
+        const childrenEl = document.getElementById('children-content');
+
+        let currentPath = [];
+
+        function updateExplorer(obj, path = []) {
+            currentPath = path;
+            
+            // Update parents
+            parentsEl.innerHTML = '';
+            path.forEach((key, index) => {
+                const parentTopic = document.createElement('div');
+                parentTopic.className = 'topic parent-topic waves-effect waves-light';
+                parentTopic.textContent = key;
+                parentTopic.onclick = () => updateExplorer(dataverse, path.slice(0, index + 1));
+                parentsEl.appendChild(parentTopic);
+            });
+
+            // Update current
+            const currentKey = path[path.length - 1] || 'Dataverse Core';
+            currentEl.textContent = currentKey;
+
+            // Update children
+            childrenEl.innerHTML = '';
+            for (let key in obj) {
+                const childTopic = document.createElement('div');
+                childTopic.className = 'topic child-topic waves-effect waves-light';
+                childTopic.innerHTML = `<h5>${key}</h5>`;
+                childTopic.onclick = (e) => {
+                    if (e.target === childTopic || e.target.tagName === 'H5') {
+                        updateExplorer(obj[key], [...path, key]);
+                    }
+                };
+
+                // Add grandchildren
+                const grandchildrenContainer = document.createElement('div');
+                grandchildrenContainer.className = 'grandchildren-container';
+                for (let grandchildKey in obj[key]) {
+                    const grandchildTopic = document.createElement('div');
+                    grandchildTopic.className = 'topic grandchild-topic waves-effect waves-light';
+                    grandchildTopic.textContent = grandchildKey;
+                    grandchildTopic.onclick = (e) => {
+                        e.stopPropagation();
+                        updateExplorer(obj[key][grandchildKey], [...path, key, grandchildKey]);
+                    };
+                    grandchildrenContainer.appendChild(grandchildTopic);
+                }
+                childTopic.appendChild(grandchildrenContainer);
+
+                childrenEl.appendChild(childTopic);
+            }
+
+            // Animate new elements
+            M.AutoInit();
+        }
+
+        // Initial display
+        updateExplorer(dataverse);
+    </script>
+    </body>
+    </html>
