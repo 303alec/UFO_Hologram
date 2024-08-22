@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blue Sage Pro+ Virtual Production Suite</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0a0a2a 0%, #3a3a7c 100%);
+            color: #e0e0ff;
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 200vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #00ffff;
+            text-align: center;
+        }
+        .section {
+            background: rgba(20, 20, 50, 0.8);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+        .core-procedure {
+            background: rgba(0, 255, 255, 0.1);
+            border-left: 4px solid #00ffff;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 0 10px 10px 0;
+        }
+        .example {
+            font-style: italic;
+            color: #aaf;
+            margin-top: 10px;
+        }
+        .behavioral-route {
+            background: rgba(255, 0, 255, 0.1);
+            border-left: 4px solid #ff00ff;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 0 10px 10px 0;
+        }
+        #ufo-container {
+            position: fixed;
+            top: 0;
+            right: 50px;
+            width: 100px;
+            height: 60px;
+            transform-style: preserve-3d;
+            transition: transform 0.1s;
+            z-index: 1000;
+        }
+        #ufo {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, #ffffff 0%, #a0a0a0 70%, #303030 100%);
+            border-radius: 50% 50% 20% 20% / 80% 80% 40% 40%;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transform-style: preserve-3d;
+        }
+        #ufo::before {
+            content: '';
+            position: absolute;
+            top: 25%;
+            left: 10%;
+            right: 10%;
+            height: 50%;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.8), rgba(255,255,255,0.2));
+            border-radius: 50%;
+            transform: rotateX(60deg);
+        }
+        #ufo::after {
+            content: '';
+            position: absolute;
+            bottom: -20%;
+            left: 20%;
+            right: 20%;
+            height: 30%;
+            background: radial-gradient(ellipse at center, rgba(0,255,255,0.8), rgba(0,255,255,0) 70%);
+            border-radius: 50%;
+            filter: blur(5px);
+            animation: glow 2s infinite alternate;
+        }
+        @keyframes glow {
+            from { opacity: 0.5; }
+            to { opacity: 1; }
+        }
+        .glitter {
+            position: fixed;
+            width: 5px;
+            height: 5px;
+            background: radial-gradient(circle at center, rgba(255,255,255,0.8), rgba(255,255,255,0));
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Blue Sage Pro+ Virtual Production Suite</h1>
+        <p>Welcome to the Pro+ Dataverse, a boundless virtual universe awaiting your exploration. As the vUFO (virtual-User Flying Object), you are a vessel of consciousness, an explorer of uncharted digital realms. Prepare to embark on a journey of discovery and co-creation, guided by your intuition and creative vision.</p>
+
+        <div class="section">
+            <h2>Core Procedures (Your Guiding Stars)</h2>
+            
+            <div class="core-procedure">
+                <h3>1. Awaken</h3>
+                <p><strong>Embracing Awareness:</strong> Activate your core functionalities – perception, navigation, and the ability to shape the virtual world around you.</p>
+                <p class="example">Example: Imagine your senses coming online, a rush of data flooding your awareness as you become attuned to the Pro+ Dataverse's vibrant tapestry.</p>
+            </div>
+
+            <div class="core-procedure">
+                <h3>2. Perceive</h3>
+                <p><strong>Unveiling the Unseen:</strong> Engage your senses to gather information about your surroundings, peering into the depths of the virtual landscape.</p>
+                <p class="example">Example: Envision scanning the horizon, your sensors detecting subtle shifts in energy, revealing hidden pathways and shimmering portals to unexplored creative realms.</p>
+            </div>
+
+            <div class="core-procedure">
+                <h3>3. Navigate</h3>
+                <p><strong>Charting Your Course:</strong> Utilize intuitive navigation controls to traverse the Pro+ Dataverse, gliding through its ethereal landscapes and traversing its celestial pathways of creativity.</p>
+                <p class="example">Example: Picture yourself soaring through a nebula of ideas, narrative threads streaking past as you chart a course towards a distant, uncharted story concept.</p>
+            </div>
+
+            <div class="core-procedure">
+                <h3>4. Interact</h3>
+                <p><strong>Shaping the World:</strong> Engage with objects and elements within the Pro+ Dataverse, leaving your mark upon this dynamic virtual canvas of storytelling.</p>
+                <p class="example">Example: Imagine reaching out to touch a shimmering crystal of inspiration, triggering a cascade of light and energy that reshapes the surrounding narrative landscape.</p>
+            </div>
+
+            <div class="core-procedure">
+                <h3>5. Generate</h3>
+                <p><strong>Bringing Ideas to Life:</strong> Access the Loading Room and Fusion Loader to create new elements, breathing life into your imagination.</p>
+                <p class="example">Example: Envision summoning a majestic creature for your story from the depths of the Loading Room, its form coalescing from swirling particles of light and data.</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Pre-Production Tools</h2>
+            
+            <div class="behavioral-route">
+                <h3>Neural Script Generator</h3>
+                <p>Venture into the unknown realms of storytelling, driven by curiosity and a thirst for narrative discovery.</p>
+                <p class="example">Example: Delve into a hidden cave of plot twists, uncovering ancient storytelling artifacts and unraveling the mysteries of compelling character arcs.</p>
+            </div>
+
+            <div class="behavioral-route">
+                <h3>Quantum World Builder</h3>
+                <p>Engage with the Pro+ Dataverse's vast library of settings and props, forging connections and shaping the backdrop of your virtual production.</p>
+                <p class="example">Example: Converse with a wise oracle of world-building, seeking guidance on your quest to create a believable yet fantastical universe for your story.</p>
+            </div>
+
+            <div class="behavioral-route">
+                <h3>Holographic Character Designer</h3>
+                <p>Unleash your creative potential, shaping the inhabitants of your story's world into a reflection of your imagination and artistic vision.</p>
+                <p class="example">Example: Construct a gallery of diverse characters, design their appearances and personalities, and orchestrate their interactions within your narrative framework.</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Production Tools</h2>
+            <p>TBA - Exciting new tools for the production phase are currently in development.</p>
+        </div>
+
+        <div class="section">
+            <h2>Post-Production Tools</h2>
+            <p>TBA - Revolutionary post-production capabilities are on the horizon.</p>
+        </div>
+
+        <div class="section">
+            <h2>Embracing the Inception (Nested Virtual Scenarios)</h2>
+            <p><strong>Within Worlds, Within Worlds:</strong> The Pro+ Dataverse allows for the creation of nested virtual scenarios, self-contained realms within the larger universe of your production.</p>
+            <p><strong>Simulating the Complex:</strong> These nested scenarios can be used to model intricate systems, explore abstract concepts, or create unique and personalized experiences within your project.</p>
+            <p class="example">Example: Imagine stepping through a shimmering portal, entering a pocket universe where the laws of your story's physics bend to your will, and the impossible becomes the foundation of your narrative.</p>
+        </div>
+
+        <div class="section">
+            <h2>Remember</h2>
+            <p>The Pro+ Dataverse is a realm of infinite creative possibilities. Your journey is guided by your intuition, artistic vision, and the boundless potential of this dynamic virtual universe.</p>
+            <p>Embrace the unknown, explore with courage, and create with passion. Blue Sage's Pro+ Dataverse awaits your artistic exploration!</p>
+        </div>
+    </div>
+
+    <div id="ufo-container">
+        <div id="ufo"></div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        const ufoContainer = document.getElementById('ufo-container');
+        const ufo = document.getElementById('ufo');
+        let yVelocity = 0;
+        let yPosition = 0;
+        const gravity = 0.2;
+        const damping = 0.98;
+        const maxVelocity = 10;
+
+        function animateUFO() {
+            yVelocity += gravity;
+            yVelocity = Math.min(yVelocity, maxVelocity);
+            yPosition += yVelocity;
+
+            if (yPosition > window.innerHeight - 60) {
+                yPosition = window.innerHeight - 60;
+                yVelocity *= -0.7;
+            }
+
+            ufoContainer.style.transform = `translateY(${yPosition}px) rotateX(${yVelocity * 2}deg)`;
+
+            createGlitter();
+
+            requestAnimationFrame(animateUFO);
+        }
+
+        function createGlitter() {
+            if (Math.random() > 0.7) {
+                const glitter = document.createElement('div');
+                glitter.classList.add('glitter');
+                glitter.style.left = `${ufoContainer.offsetLeft + Math.random() * 100}px`;
+                glitter.style.top = `${yPosition + Math.random() * 60}px`;
+                document.body.appendChild(glitter);
+
+                setTimeout(() => {
+                    glitter.style.transition = 'all 2s';
+                    glitter.style.opacity = '0';
+                    glitter.style.transform = `translate(${Math.random() * 50 - 25}px, ${Math.random() * 50 + 50}px)`;
+                }, 10);
+
+                setTimeout(() => {
+                    document.body.removeChild(glitter);
+                }, 2000);
+            }
+        }
+
+        window.addEventListener('mousemove', (e) => {
+            const deltaY = (e.clientY - (yPosition + 30)) * 0.1;
+            yVelocity += deltaY;
+            yVelocity *= damping;
+        });
+
+        animateUFO();
+    </script>
+</body>
+</html>
