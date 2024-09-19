@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Advancements UFO Network</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <style>
+        body { 
+            margin: 0; 
+            padding: 0; 
+            font-family: Arial, sans-serif; 
+            background-color: #000; 
+            color: #fff; 
+            overflow: hidden; 
+        }
+        #main-container { 
+            display: flex; 
+            height: 100vh; 
+        }
+        #graph-container { 
+            flex: 1; 
+            background-color: #000; 
+        }
+        #sidebar { 
+            width: 300px; 
+            overflow-y: auto; 
+            background-color: #222; 
+            padding: 10px; 
+        }
+        .form-group { 
+            margin-bottom: 10px; 
+        }
+        input, select, textarea { 
+            width: 100%; 
+            padding: 5px; 
+            background-color: #333; 
+            color: #fff; 
+            border: 1px solid #444; 
+        }
+        button { 
+            padding: 5px 10px; 
+            background-color: #4CAF50; 
+            color: white; 
+            border: none; 
+            cursor: pointer; 
+        }
+        button:hover { 
+            background-color: #45a049; 
+        }
+        #node-visualizer { 
+            margin-top: 20px; 
+        }
+        #related-concepts-list { 
+            list-style-type: none; 
+            padding: 0; 
+        }
+        #related-concepts-list li { 
+            margin-bottom: 5px; 
+        }
+        #related-concepts-list button { 
+            margin-left: 10px; 
+        }
+        .node text { 
+            font-size: 8px; 
+            fill: #fff; 
+            transition: font-size 0.3s ease; 
+        }
+        .link { 
+            stroke: rgba(255, 255, 255, 0.2); 
+            stroke-width: 1px; 
+            transition: stroke-width 0.3s ease; 
+        }
+        .node circle { 
+            stroke: #fff; 
+            stroke-width: 0.5px; 
+            transition: stroke-width 0.3s ease, r 0.3s ease; 
+            cursor: pointer;
+        }
+        .node:hover circle { 
+            stroke-width: 1.5px; 
+            r: 7;
+        }
+        .highlighted {
+            stroke: #f00 !important;
+            stroke-width: 2px !important;
+        }
+        #legend {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .ufo {
+            fill: #00ff00;
+            stroke: #ffffff;
+            stroke-width: 1px;
+        }
+    </style>
+</head>
+<body>
+    <div id="main-container">
+        <div id="graph-container"></div>
+        <div id="sidebar">
+            <div id="attribute-editor">
+                <h3>Node Attributes</h3>
+                <div class="form-group">
+                    <label for="node-name">Name:</label>
+                    <input type="text" id="node-name">
+                </div>
+                <div class="form-group">
+                    <label for="node-year">Year:</label>
+                    <input type="number" id="node-year">
+                </div>
+                <div class="form-group">
+                    <label for="node-category">Category:</label>
+                    <select id="node-category"></select>
+                </div>
+                <div class="form-group">
+                    <label for="node-description">Description:</label>
+                    <textarea id="node-description" rows="3"></textarea>
+                </div>
+                <button id="update-node">Update Node</button>
+            </div>
+            <div id="node-visualizer">
+                <h3>Related Concepts</h3>
+                <ul id="related-concepts-list"></ul>
+            </div>
+        </div>
+    </div>
+    <div id="legend"></div>
+    <script>
+    // JSON data (AI advancements network)
+    const jsonData = {
+        "nodes": [
+            {"id": "1", "name": "Neural Networks", "year": 1943, "category": "Foundation"},
+            {"id": "2", "name": "Perceptron", "year": 1958, "category": "Foundation"},
+            {"id": "3", "name": "Backpropagation", "year": 1986, "category": "Foundation"},
+            {"id": "4", "name": "Convolutional Neural Networks", "year": 1989, "category": "Architecture"},
+            {"id": "5", "name": "Long Short-Term Memory (LSTM)", "year": 1997, "category": "Architecture"},
+            {"id": "6", "name": "Deep Learning", "year": 2006, "category": "Paradigm"},
+            {"id": "7", "name": "Transformer Architecture", "year": 2017, "category": "Architecture"},
+            {"id": "8", "name": "GPT", "year": 2018, "category": "NLP"},
+            {"id": "9", "name": "BERT", "year": 2018, "category": "NLP"},
+            {"id": "10", "name": "GPT-3", "year": 2020, "category": "NLP"},
+            {"id": "11", "name": "Reinforcement Learning", "year": 1980, "category": "Paradigm"},
+            {"id": "12", "name": "Q-Learning", "year": 1989, "category": "Reinforcement Learning"},
+            {"id": "13", "name": "Deep Q-Networks (DQN)", "year": 2013, "category": "Reinforcement Learning"},
+            {"id": "14", "name": "AlphaGo", "year": 2015, "category": "Reinforcement Learning"},
+            {"id": "15", "name": "AlphaZero", "year": 2017, "category": "Reinforcement Learning"},
+            {"id": "16", "name": "Computer Vision", "year": 1966, "category": "Domain"},
+            {"id": "17", "name": "ImageNet", "year": 2009, "category": "Domain"},
+            {"id": "18", "name": "Object Detection", "year": 2001, "category": "Computer Vision"},
+            {"id": "19", "name": "Image Segmentation", "year": 2015, "category": "Computer Vision"},
+            {"id": "20", "name": "Facial Recognition", "year": 1964, "category": "Computer Vision"},
+            {"id": "21", "name": "Natural Language Processing", "year": 1950, "category": "Domain"},
+            {"id": "22", "name": "Machine Translation", "year": 1949, "category": "Natural Language Processing"},
+            {"id": "23", "name": "Sentiment Analysis", "year": 2003, "category": "Natural Language Processing"},
+            {"id": "24", "name": "Chatbots", "year": 1966, "category": "Natural Language Processing"},
+            {"id": "25", "name": "Robotics", "year": 1920, "category": "Domain"},
+            {"id": "26", "name": "Industrial Robots", "year": 1954, "category": "Robotics"},
+            {"id": "27", "name": "Mobile Robots", "year": 1961, "category": "Robotics"},
+            {"id": "28", "name": "Humanoid Robots", "year": 1973, "category": "Robotics"},
+            {"id": "29", "name": "Self-Driving Cars", "year": 1989, "category": "Robotics"},
+            {"id": "30", "name": "Artificial General Intelligence", "year": 1956, "category": "Goal"}
+        ],
+        "links": []
+    };
+
+    // Generate links based on temporal and categorical relationships
+    for (let i = 0; i < jsonData.nodes.length; i++) {
+        for (let j = i + 1; j < jsonData.nodes.length; j++) {
+            const nodeA = jsonData.nodes[i];
+            const nodeB = jsonData.nodes[j];
+            
+            // Connect nodes within 3 years of each other
+            if (Math.abs(nodeA.year - nodeB.year) <= 3) {
+                jsonData.links.push({"source": nodeA.id, "target": nodeB.id, "value": 1});
+            }
+            
+            // Connect nodes in the same category
+            if (nodeA.category === nodeB.category) {
+                jsonData.links.push({"source": nodeA.id, "target": nodeB.id, "value": 2});
+            }
+
+            // Connect nodes with parent-child category relationships
+            if (nodeA.category === nodeB.name || nodeB.category === nodeA.name) {
+                jsonData.links.push({"source": nodeA.id, "target": nodeB.id, "value": 3}); 
+            }
+        }
+    }
+    
+    
+
+    // D3.js visualization
+    const width = window.innerWidth - 300; // Subtract sidebar width
+    const height = window.innerHeight;
+
+    const color = d3.scaleOrdinal(d3.schemeCategory10);
+
+    const simulation = d3.forceSimulation(jsonData.nodes)
+        .force("link", d3.forceLink(jsonData.links).id(d => d.id).strength(d => d.value * 0.05))
+        .force("charge", d3.forceManyBody().strength(-50))
+        .force("center", d3.forceCenter(width / 2, height / 2));
+
+    const svg = d3.select("#graph-container").append("svg")
+        .attr("width", width)
+        .attr("height", height);
+
+    // Add zoom behavior
+    const zoom = d3.zoom()
+        .scaleExtent([0.1, 10])
+        .on("zoom", zoomed);
+
+    svg.call(zoom);
+
+    // Create a container group for all elements
+    const container = svg.append("g");
+
+    // Add a clipPath to prevent rendering outside the SVG
+    svg.append("defs").append("clipPath")
+        .attr("id", "clip")
+        .append("rect")
+        .attr("width", width)
+        .attr("height", height);
+
+    // Apply the clipPath to the container
+    container.attr("clip-path", "url(#clip)");
+
+    const link = container.append("g")
+        .selectAll("line")
+        .data(jsonData.links)
+        .enter().append("line")
+        .attr("class", "link")
+        .attr("stroke-width", d => Math.sqrt(d.value));
+
+    const node = container.append("g")
+        .selectAll("g")
+        .data(jsonData.nodes)
+        .enter().append("g")
+        .attr("class", "node")
+        .call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended))
+        .on("click", highlightConnections);
+
+    // Create UFO-like shape
+    const ufoPath = "M-5,0 L-3,-3 L3,-3 L5,0 L3,3 L-3,3 Z";
+
+    node.append("path")
+        .attr("d", ufoPath)
+        .attr("class", "ufo")
+        .attr("fill", d => color(d.category));
+
+    node.append("text")
+        .attr("dx", 8)
+        .attr("dy", ".35em")
+        .text(d => d.name);
+
+    simulation.on("tick", () => {
+        link
+            .attr("x1", d => d.source.x)
+            .attr("y1", d => d.source.y)
+            .attr("x2", d => d.target.x)
+            .attr("y2", d => d.target.y);
+
+        node
+            .attr("transform", d => `translate(${d.x},${d.y})`);
+    });
+
+    function dragstarted(event) {
+        if (!event.active) simulation.alphaTarget(0.3).restart();
+        event.subject.fx = event.subject.x;
+        event.subject.fy = event.subject.y;
+    }
+
+    function dragged(event) {
+        event.subject.fx = event.x;
+        event.subject.fy = event.y;
+    }
+
+    function dragended(event) {
+        if (!event.active) simulation.alphaTarget(0);
+        event.subject.fx = null;
+        event.subject.fy = null;
+    }
+
+    function zoomed(event) {
+        container.attr("transform", event.transform);
+        // Scale text and nodes based on zoom level
+        node.selectAll("text")
+            .style("font-size", `${8 / event.transform.k}px`);
+        node.selectAll(".ufo")
+            .attr("transform", d => `scale(${1 / event.transform.k})`);
+        link.attr("stroke-width", d => Math.sqrt(d.value) / event.transform.k);
+    }
+
+    function highlightConnections(event, d) {
+        // Reset all nodes and links
+        node.classed("highlighted", false);
+        link.classed("highlighted", false);
+
+        // Highlight connected nodes and links
+        const connectedNodeIds = new Set();
+        link.each(function(l) {
+            if (l.source.id === d.id || l.target.id === d.id) {
+                d3.select(this).classed("highlighted", true);
+                connectedNodeIds.add(l.source.id).add(l.target.id);
+            }
+        });
+
+        node.filter(n => connectedNodeIds.has(n.id))
+            .classed("highlighted", true);
+
+        // Update sidebar with node information
+        updateSidebar(d);
+    }
+
+    // Add legend
+    const legend = d3.select("#legend");
+
+    const categories = [...new Set(jsonData.nodes.map(d => d.category))];
+
+    categories.forEach((category, i) => {
+        const legendRow = legend.append("div")
+            .style("display", "flex")
+            .style("align-items", "center")
+            .style("margin-bottom", "5px");
+        
+        legendRow.append("div")
+            .style("width", "10px")
+            .style("height", "10px")
+            .style("background-color", color(category))
+            .style("margin-right", "5px");
+        
+        legendRow.append("div")
+            .text(category)
+            .style("font-size", "12px");
+    });
+
+    // Sidebar functionality
+    function updateSidebar(nodeData) {
+        document.getElementById('node-name').value = nodeData.name;
+        document.getElementById('node-year').value = nodeData.year;
+        document.getElementById('node-category').value = nodeData.category;
+        document.getElementById('node-description').value = nodeData.description || '';
+
+        // Update related concepts
+        const relatedConceptsList = document.getElementById('related-concepts-list');
+        relatedConceptsList.innerHTML = '';
+        const relatedNodes = jsonData.links
+            .filter(link => link.source.id === nodeData.id || link.target.id === nodeData.id)
+            .map(link => link.source.id === nodeData.id ? link.target : link.source);
+
+        relatedNodes.forEach(relatedNode => {
+            const li = document.createElement('li');
+            li.textContent = relatedNode.name;
+            const button = document.createElement('button');
+            button.textContent = 'View';
+            button.onclick = () => highlightConnections(null, relatedNode);
+            li.appendChild(button);
+            relatedConceptsList.appendChild(li);
+        });
+    }
+
+    // Populate category dropdown
+    const categorySelect = document.getElementById('node-category');
+    categories.forEach(category => {
+        const option = document.createElement('option');
+        option.value = category;
+        option.textContent = category;
+        categorySelect.appendChild(option);
+    });
+
+    // Update node button functionality
+    document.getElementById('update-node').addEventListener('click', () => {
+        const selectedNode = jsonData.nodes.find(node => node.name === document.getElementById('node-name').value);
+        if (selectedNode) {
+            selectedNode.year = parseInt(document.getElementById('node-year').value);
+            selectedNode.category = document.getElementById('node-category').value;
+            selectedNode.description = document.getElementById('node-description').value;
+
+            // Update node appearance
+            node.filter(n => n.id === selectedNode.id)
+                .select('.ufo')
+                .attr('fill', color(selectedNode.category));
+
+            simulation.alpha(1).restart();
+        }
+    });
+
+    // Initial sidebar update
+    updateSidebar(jsonData.nodes[0]);
+    
+    // AI-driven autonomous movement
+    function getAIFunction(nodeName) {
+        // This is where we would normally make an API call to an AI service
+        // For demonstration, we'll use predefined functions based on node names
+        const functions = {
+            "Neural Networks": (x, y, t) => ({
+                x: x + Math.sin(t * 0.05) * 2,
+                y: y + Math.cos(t * 0.05) * 2
+            }),
+            "Perceptron": (x, y, t) => ({
+                x: x + Math.sin(t * 0.03) * 3,
+                y: y + Math.cos(t * 0.03) * 3
+            }),
+            "Backpropagation": (x, y, t) => ({
+                x: x + Math.sin(t * 0.02) * 4,
+                y: y + Math.cos(t * 0.02) * 4
+            }),
+            // ... (Add more predefined AI functions for other nodes) ... 
+            // For now, let's give all other nodes a default movement pattern:
+            "default": (x, y, t) => ({
+                x: x + Math.sin(t * 0.01) * 5,
+                y: y + Math.cos(t * 0.01) * 5
+            })
+        };
+
+        return functions[nodeName] || functions["default"];
+    }
+
+
+    let t = 0;
+    setInterval(() => {
+        t += 1;
+        jsonData.nodes.forEach(node => {
+            const aiFunction = getAIFunction(node.name);
+            const newPosition = aiFunction(node.x, node.y, t);
+            node.x = newPosition.x;
+            node.y = newPosition.y;
+        });
+        simulation.alpha(0.1).restart(); 
+    }, 100);
+
+
+    </script>
+</body>
+</html>
